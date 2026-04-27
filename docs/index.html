@@ -1,1 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Peaks Supply Co. — GTM Training Demo Site</title>
 
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TWNMZ5MP');</script>
+<!-- End Google Tag Manager -->
+   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #F5F0E8;
+      --surface: #FDFAF4;
+      --ink: #1A1612;
+      --ink-muted: #6B6156;
+      --accent: #C84B2F;
+      --accent-hover: #A33A20;
+      --border: #DDD5C4;
+      --tag-color: #2D5016;
+      --tag-bg: #EAF0E2;
+      --success: #2D5016;
+      --success-bg: #EAF0E2;
+      --radius: 4px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── GTM STATUS BANNER ── */
+    #gtm-status-banner {
+      background: #1A1612;
+      color: #F5F0E8;
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    #gtm-status-banner .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #888;
+      display: inline-block;
+      transition: background 0.4s;
+    }
+    #gtm-status-banner .dot.live { background: #6FCF6F; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 32px; }
+    nav ul a {
+      text-decoration: none; color: var(--ink-muted);
+      font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--ink); }
+    .nav-cart {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .nav-cart:hover { background: var(--accent-hover); }
+    #cart-count {
+      position: absolute; top: -6px; right: -6px;
+      background: var(--ink); color: white;
+      border-radius: 50%; width: 18px; height: 18px;
+      font-size: 10px; display: flex; align-items: center; justify-content: center;
+      display: none;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 80px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 52px; line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero p { color: var(--ink-muted); margin-bottom: 32px; font-size: 16px; }
+    .hero-img {
+      background: linear-gradient(135deg, #D4C9B4 0%, #B8A990 100%);
+      border-radius: 8px;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 80px;
+      color: rgba(255,255,255,0.6);
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--ink);
+      margin-left: 12px;
+    }
+    .btn-outline:hover { border-color: var(--ink); background: transparent; transform: translateY(-1px); }
+
+    /* ── SECTION HEADERS ── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .section-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px; margin-bottom: 12px;
+    }
+    .section-header p { color: var(--ink-muted); }
+
+    /* ── PRODUCTS ── */
+    #products { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .product-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .product-img {
+      height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 56px;
+      background: linear-gradient(135deg, #EDE6D8, #D9CFC0);
+    }
+    .product-info { padding: 20px; }
+    .product-category {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+    .product-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px; margin-bottom: 8px;
+    }
+    .product-desc { font-size: 13px; color: var(--ink-muted); margin-bottom: 16px; }
+    .product-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .product-price { font-weight: 700; font-size: 18px; }
+    .add-to-cart {
+      background: var(--ink);
+      color: white; border: none;
+      padding: 8px 16px; border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .add-to-cart:hover { background: var(--accent); }
+
+    /* ── PRODUCT MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 40px;
+      max-width: 500px; width: 90%;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none;
+      font-size: 20px; cursor: pointer;
+      color: var(--ink-muted);
+    }
+    .modal h3 { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 8px; }
+    .modal-price { font-size: 22px; font-weight: 700; margin-bottom: 16px; }
+    .modal-desc { color: var(--ink-muted); margin-bottom: 24px; }
+    .modal-actions { display: flex; gap: 12px; }
+
+    /* ── NEWSLETTER ── */
+    #newsletter {
+      background: var(--ink);
+      color: white;
+      padding: 80px 40px;
+    }
+    .newsletter-inner {
+      max-width: 560px; margin: 0 auto; text-align: center;
+    }
+    #newsletter h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px; margin-bottom: 16px;
+    }
+    #newsletter p { color: #A89E92; margin-bottom: 32px; }
+    #newsletter-form { display: flex; gap: 12px; }
+    #newsletter-form input {
+      flex: 1;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+    }
+    #newsletter-form input::placeholder { color: #6B6156; }
+    #newsletter-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    #newsletter-form button {
+      background: var(--accent);
+      color: white; border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    #newsletter-form button:hover { background: var(--accent-hover); }
+    #newsletter-success {
+      display: none;
+      background: rgba(111,207,111,0.15);
+      border: 1px solid rgba(111,207,111,0.3);
+      color: #6FCF6F;
+      padding: 16px;
+      border-radius: var(--radius);
+      margin-top: 16px;
+    }
+
+    /* ── CONTACT FORM ── */
+    #contact {
+      padding: 80px 40px;
+      max-width: 680px; margin: 0 auto;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 600; color: var(--ink-muted); letter-spacing: 0.03em; }
+    input[type=text], input[type=email], select, textarea {
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      transition: border-color 0.2s;
+    }
+    input[type=text]:focus, input[type=email]:focus, select:focus, textarea:focus {
+      outline: none; border-color: var(--accent);
+    }
+    textarea { resize: vertical; min-height: 120px; }
+    #contact-success {
+      display: none;
+      background: var(--success-bg);
+      border: 1px solid #A8C78C;
+      color: var(--success);
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      margin-top: 20px;
+      font-weight: 500;
+    }
+
+    /* ── DATALAYER CONSOLE ── */
+    #dl-console {
+      position: fixed;
+      bottom: 20px; right: 20px;
+      width: 360px;
+      background: #0E1117;
+      border: 1px solid #2A3040;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      z-index: 9999;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      max-height: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+    #dl-console-header {
+      padding: 10px 14px;
+      background: #161B27;
+      border-bottom: 1px solid #2A3040;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    #dl-console-header span { color: #6FCF6F; font-weight: 700; font-size: 11px; letter-spacing: 0.05em; }
+    #dl-console-header .dl-meta { color: #555E73; font-size: 10px; }
+    #dl-console-body {
+      overflow-y: auto;
+      padding: 10px;
+      flex: 1;
+    }
+    .dl-entry {
+      margin-bottom: 8px;
+      padding: 8px;
+      background: #161B27;
+      border-radius: 4px;
+      border-left: 2px solid #6FCF6F;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+    .dl-entry .event-name { color: #6FCF6F; font-weight: 700; margin-bottom: 4px; }
+    .dl-entry .event-data { color: #8892A4; white-space: pre-wrap; line-height: 1.5; }
+    .dl-entry .event-data .key { color: #7AB8F5; }
+    .dl-entry .event-data .val { color: #F5A623; }
+    #dl-console-toggle {
+      background: #161B27; border: 1px solid #2A3040;
+      color: #6FCF6F; font-size: 11px;
+      padding: 4px 8px; border-radius: 4px;
+      cursor: pointer;
+    }
+    .dl-placeholder { color: #555E73; text-align: center; padding: 24px; line-height: 1.8; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 13px;
+    }
+    .training-badge {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tag-color);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 360px; right: 20px;
+      background: var(--ink); color: white;
+      padding: 12px 20px; border-radius: var(--radius);
+      font-size: 13px; font-weight: 500;
+      transform: translateY(20px); opacity: 0;
+      transition: all 0.3s;
+      z-index: 9998;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; }
+      .product-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      #dl-console { width: calc(100vw - 40px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TWNMZ5MP"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+  <!-- GTM STATUS BANNER -->
+  <div id="gtm-status-banner">
+    <span class="dot" id="gtm-dot"></span>
+    <span id="gtm-status-text">GTM not detected — add your snippet to the &lt;head&gt; to get started</span>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">Peaks <span>Supply</span> Co.</a>
+    <ul>
+      <li><a href="#products">Shop</a></li>
+      <li><a href="#newsletter">Newsletter</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-cart" onclick="openCart()">
+      Cart
+      <span id="cart-count">0</span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="hero-eyebrow">New Season Arrivals</div>
+      <h1>Gear built for the <em>long way</em> around.</h1>
+      <p>Durable outdoor equipment for people who take the scenic route. Built to last, priced honestly.</p>
+      <a href="#products" class="btn" id="hero-cta" onclick="trackHeroCTA()">Shop New Arrivals</a>
+      <a href="#contact" class="btn btn-outline">Get in Touch</a>
+    </div>
+    <div class="hero-img">⛺</div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="products">
+    <div class="section-header">
+      <h2>Featured Gear</h2>
+      <p>Hand-picked for this season. Free shipping over $75.</p>
+    </div>
+    <div class="product-grid" id="product-grid"></div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section id="newsletter">
+    <div class="newsletter-inner">
+      <h2>Stay in the loop.</h2>
+      <p>New drops, trail guides, and gear reviews — straight to your inbox. No noise.</p>
+      <form id="newsletter-form" onsubmit="handleNewsletter(event)">
+        <input type="email" id="nl-email" placeholder="your@email.com" required />
+        <button type="submit">Subscribe</button>
+      </form>
+      <div id="newsletter-success">✓ You're subscribed! Welcome to the crew.</div>
+    </div>
+  </section>
+
+  <!-- CONTACT FORM -->
+  <section id="contact">
+    <div class="section-header">
+      <h2>Get in Touch</h2>
+      <p>Questions about gear, orders, or wholesale? We read every message.</p>
+    </div>
+    <form id="contact-form" onsubmit="handleContact(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="cf-name">First Name</label>
+          <input type="text" id="cf-name" placeholder="Alex" required />
+        </div>
+        <div class="form-group">
+          <label for="cf-last">Last Name</label>
+          <input type="text" id="cf-last" placeholder="Rivera" />
+        </div>
+        <div class="form-group">
+          <label for="cf-email">Email</label>
+          <input type="email" id="cf-email" placeholder="you@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="cf-topic">Topic</label>
+          <select id="cf-topic">
+            <option value="">Select a topic…</option>
+            <option value="order">Order question</option>
+            <option value="returns">Returns & exchanges</option>
+            <option value="wholesale">Wholesale inquiry</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" placeholder="Tell us what's on your mind…" required></textarea>
+        </div>
+        <div class="form-group full">
+          <button type="submit" class="btn">Send Message</button>
+        </div>
+      </div>
+    </form>
+    <div id="contact-success">✓ Message sent! We'll get back to you within 1–2 business days.</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="training-badge">GTM Training Demo Site</div>
+    <p>Peaks Supply Co. — Built for the Rivers Agency GTM/GA4 Training</p>
+    <p style="margin-top:6px; font-size:11px;">This site is a fictional demo. All interactions push to the dataLayer for training purposes.</p>
+  </footer>
+
+  <!-- PRODUCT MODAL -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div id="modal-emoji" style="font-size:48px;margin-bottom:16px;"></div>
+      <h3 id="modal-name"></h3>
+      <div class="modal-price" id="modal-price"></div>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-actions">
+        <button class="btn" id="modal-add-btn" onclick="addToCartFromModal()">Add to Cart</button>
+        <button class="btn btn-outline" onclick="closeModal()">Keep Browsing</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast"></div>
+
+  <!-- DATALAYER CONSOLE -->
+  <div id="dl-console">
+    <div id="dl-console-header" onclick="toggleConsole()">
+      <span>▶ dataLayer Inspector</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="dl-meta" id="dl-event-count">0 events</span>
+        <button id="dl-console-toggle">—</button>
+      </div>
+    </div>
+    <div id="dl-console-body">
+      <div class="dl-placeholder">
+        Interact with the page to see<br/>dataLayer pushes appear here.<br/><br/>
+        <span style="color:#2A3040">▸ click a product<br/>▸ add to cart<br/>▸ submit a form</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── PRODUCT DATA ──
+    const products = [
+      { id: 'trailpack-45', name: 'Trailpack 45L', category: 'Packs', price: 189, emoji: '🎒', desc: 'Ventilated back panel, 45L capacity, rain cover included. The one bag you need.' },
+      { id: 'summit-tent', name: 'Summit Tent 2P', category: 'Shelter', price: 349, emoji: '⛺', desc: 'Three-season, freestanding, 2 doors. Sets up in under 4 minutes.' },
+      { id: 'merino-base', name: 'Merino Base Layer', category: 'Apparel', price: 89, emoji: '🧥', desc: '100% merino wool, odor resistant, temperature regulating. Wear for days.' },
+      { id: 'headlamp-pro', name: 'Headlamp Pro 500', category: 'Lighting', price: 54, emoji: '🔦', desc: '500 lumen max, red mode, rechargeable via USB-C. 60hr battery.' },
+      { id: 'titanium-pot', name: 'Titanium Cook Pot', category: 'Cooking', price: 42, emoji: '🍳', desc: '750ml titanium, nesting lid, folding handles. Featherlight at 105g.' },
+      { id: 'trail-map-set', name: 'Trail Map Bundle', category: 'Navigation', price: 28, emoji: '🗺️', desc: 'Waterproof topo maps for 12 popular trail systems. Plan the adventure.' },
+    ];
+
+    let cart = [];
+    let modalProduct = null;
+    let dlEventCount = 0;
+    let consoleOpen = true;
+
+    // ── RENDER PRODUCTS ──
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = products.map(p => `
+        <div class="product-card" onclick="openModal('${p.id}')" data-product-id="${p.id}">
+          <div class="product-img">${p.emoji}</div>
+          <div class="product-info">
+            <div class="product-category">${p.category}</div>
+            <div class="product-name">${p.name}</div>
+            <div class="product-desc">${p.desc}</div>
+            <div class="product-footer">
+              <span class="product-price">$${p.price}</span>
+              <button class="add-to-cart" onclick="event.stopPropagation(); quickAddToCart('${p.id}')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── DATALAYER PUSH (intercepted for console) ──
+    window.dataLayer = window.dataLayer || [];
+    const _origPush = window.dataLayer.push.bind(window.dataLayer);
+    window.dataLayer.push = function(obj) {
+      _origPush(obj);
+      if (obj.event) logToConsole(obj);
+    };
+
+    function logToConsole(obj) {
+      dlEventCount++;
+      document.getElementById('dl-event-count').textContent = dlEventCount + ' event' + (dlEventCount !== 1 ? 's' : '');
+      const body = document.getElementById('dl-console-body');
+      // remove placeholder
+      const placeholder = body.querySelector('.dl-placeholder');
+      if (placeholder) placeholder.remove();
+
+      const entry = document.createElement('div');
+      entry.className = 'dl-entry';
+      const dataLines = Object.entries(obj)
+        .filter(([k]) => k !== 'event')
+        .map(([k,v]) => `  <span class="key">${k}</span>: <span class="val">${JSON.stringify(v)}</span>`)
+        .join('\n');
+      entry.innerHTML = `
+        <div class="event-name">event: "${obj.event}"</div>
+        ${dataLines ? `<div class="event-data">${dataLines}</div>` : ''}
+      `;
+      body.insertBefore(entry, body.firstChild);
+    }
+
+    function toggleConsole() {
+      consoleOpen = !consoleOpen;
+      const body = document.getElementById('dl-console-body');
+      const btn = document.getElementById('dl-console-toggle');
+      body.style.display = consoleOpen ? '' : 'none';
+      btn.textContent = consoleOpen ? '—' : '+';
+    }
+
+    // ── GTM DETECTION ──
+    function checkGTM() {
+      const hasGTM = typeof window.google_tag_manager !== 'undefined' ||
+                     (window.dataLayer && window.dataLayer.some(e => e['gtm.start']));
+      const dot = document.getElementById('gtm-dot');
+      const text = document.getElementById('gtm-status-text');
+      if (hasGTM) {
+        dot.classList.add('live');
+        text.textContent = 'GTM detected and active ✓';
+      }
+    }
+    setTimeout(checkGTM, 1500);
+
+    // ── PRODUCT MODAL ──
+    function openModal(id) {
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      modalProduct = p;
+      document.getElementById('modal-emoji').textContent = p.emoji;
+      document.getElementById('modal-name').textContent = p.name;
+      document.getElementById('modal-price').textContent = '$' + p.price;
+      document.getElementById('modal-desc').textContent = p.desc;
+      document.getElementById('product-modal').classList.add('open');
+
+      // DATALAYER: product view
+      window.dataLayer.push({
+        event: 'product_view',
+        product_id: p.id,
+        product_name: p.name,
+        product_category: p.category,
+        product_price: p.price
+      });
+    }
+
+    function closeModal() {
+      document.getElementById('product-modal').classList.remove('open');
+      modalProduct = null;
+    }
+
+    // ── ADD TO CART ──
+    function addToCartFromModal() {
+      if (modalProduct) {
+        addToCart(modalProduct);
+        closeModal();
+      }
+    }
+
+    function quickAddToCart(id) {
+      const p = products.find(x => x.id === id);
+      if (p) addToCart(p);
+    }
+
+    function addToCart(p) {
+      cart.push(p);
+      const count = document.getElementById('cart-count');
+      count.textContent = cart.length;
+      count.style.display = 'flex';
+
+      // DATALAYER: add_to_cart
+      window.dataLayer.push({
+        event: 'add_to_cart',
+        product_id: p.id,
+        product_name: p.name,
+        product_category: p.category,
+        product_price: p.price,
+        cart_total: cart.reduce((s, i) => s + i.price, 0)
+      });
+
+      showToast('Added ' + p.name + ' to cart');
+    }
+
+    function openCart() {
+      // DATALAYER: view_cart
+      window.dataLayer.push({
+        event: 'view_cart',
+        cart_items: cart.length,
+        cart_total: cart.reduce((s, i) => s + i.price, 0)
+      });
+      showToast('Cart: ' + cart.length + ' item(s) — $' + cart.reduce((s,i)=>s+i.price,0));
+    }
+
+    // ── HERO CTA ──
+    function trackHeroCTA() {
+      window.dataLayer.push({
+        event: 'hero_cta_click',
+        cta_text: 'Shop New Arrivals',
+        cta_location: 'hero'
+      });
+    }
+
+    // ── NEWSLETTER ──
+    function handleNewsletter(e) {
+      e.preventDefault();
+      const email = document.getElementById('nl-email').value;
+      document.getElementById('newsletter-success').style.display = 'block';
+      document.getElementById('newsletter-form').style.display = 'none';
+
+      // DATALAYER: newsletter_signup
+      window.dataLayer.push({
+        event: 'newsletter_signup',
+        form_id: 'newsletter',
+        user_email_domain: email.split('@')[1] || 'unknown'
+      });
+    }
+
+    // ── CONTACT FORM ──
+    function handleContact(e) {
+      e.preventDefault();
+      const topic = document.getElementById('cf-topic').value;
+      document.getElementById('contact-success').style.display = 'block';
+
+      // DATALAYER: contact_form_submit
+      window.dataLayer.push({
+        event: 'contact_form_submit',
+        form_id: 'contact',
+        inquiry_topic: topic || 'not_selected'
+      });
+    }
+
+    // ── SCROLL DEPTH ──
+    const scrollMilestones = [25, 50, 75, 90];
+    const firedScrolls = new Set();
+    window.addEventListener('scroll', () => {
+      const pct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+      scrollMilestones.forEach(m => {
+        if (pct >= m && !firedScrolls.has(m)) {
+          firedScrolls.add(m);
+          window.dataLayer.push({
+            event: 'scroll_depth',
+            scroll_percentage: m
+          });
+        }
+      });
+    });
+
+    // ── TOAST ──
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // ── INIT ──
+    renderProducts();
+
+    // Page view push
+    window.dataLayer.push({
+      event: 'page_view',
+      page_title: document.title,
+      page_path: window.location.pathname
+    });
+  </script>
+</body>
+</html>
