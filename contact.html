@@ -849,7 +849,7 @@ window.addEventListener('scroll', () => {
 // ══════════════════════════════════════════════════
 function checkGTM() {
   const detected = typeof window.google_tag_manager !== 'undefined' ||
-    (window.dataLayer && window.dataLayer.some(e => e['gtm.start']));
+    (window.dataLayer && window.dataLayer.some(e => e['gtm.load']));
   if (detected) {
     document.getElementById('gtm-dot').classList.add('live');
     document.getElementById('gtm-status').textContent = 'GTM detected and active ✓';
