@@ -13,6 +13,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWNMZ5MP');</script>
 <!-- End Google Tag Manager -->
 
+<script>
+  window.dataLayer = window.dataLayer || [];
+  const _push = window.dataLayer.push.bind(window.dataLayer);
+  window.dataLayer.push = function(obj) {
+    _push(obj);
+    if (obj.event) renderDLEntry(obj);
+
+    // GTM detection built into the intercept
+    if (obj['gtm.load'] || obj['gtm.start']) {
+      const dot = document.getElementById('gtm-dot');
+      const status = document.getElementById('gtm-status');
+      if (dot) dot.classList.add('live');
+      if (status) status.textContent = 'GTM detected and active ✓';
+    }
+  };
+</script>
+
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
@@ -414,12 +432,6 @@ let schemaOpen = false;
 // ══════════════════════════════════════════════════
 // DATALAYER INTERCEPT
 // ══════════════════════════════════════════════════
-window.dataLayer = window.dataLayer || [];
-const _push = window.dataLayer.push.bind(window.dataLayer);
-window.dataLayer.push = function(obj) {
-  _push(obj);
-  if (obj.event) renderDLEntry(obj);
-};
 
 function renderDLEntry(obj) {
   dlEventCount++;
@@ -504,119 +516,6 @@ function pushEcommerce(event, ecomData) {
   // GA4 requires clearing ecommerce before each push
   window.dataLayer.push({ ecommerce: null });
   window.dataLayer.push({ event, ecommerce: ecomData });
-}
-
-// ══════════════════════════════════════════════════
-// RENDER PRODUCTS
-// ══════════════════════════════════════════════════
-function renderProducts() {
-  const grid = document.getElementById('product-grid');
-  grid.innerHTML = products.map((p, i) => `
-    <div class="product-card" onclick="openModal('${p.item_id}')" data-id="${p.item_id}">
-      <div class="product-img">${p.emoji}</div>
-      <div class="product-body">
-        <div class="product-cat">${p.item_category}</div>
-        <div class="product-name">${p.item_name}</div>
-        <div class="product-desc">${p.desc}</div>
-        <div class="product-footer">
-          <span class="product-price">$${p.price}</span>
-          <button class="add-btn" onclick="event.stopPropagation(); quickAdd('${p.item_id}', ${i})">Add to Cart</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  // view_item_list — fires when product list renders
-  pushEcommerce('view_item_list', {
-    item_list_id:   'featured_gear',
-    item_list_name: 'Featured Gear',
-    items: products.map((p, i) => itemObj(p, i)),
-  });
-}
-
-// ══════════════════════════════════════════════════
-// RENDER PROMOTIONS
-// ══════════════════════════════════════════════════
-function renderPromotions() {
-  const grid = document.getElementById('promo-grid');
-  grid.innerHTML = promotions.map((pr, i) => `
-    <div class="promo-card ${pr.color}" onclick="selectPromotion('${pr.promotion_id}')" data-promo="${pr.promotion_id}">
-      <span class="promo-id">${pr.promotion_id}</span>
-      <h3>${pr.promotion_name}</h3>
-      <p>${pr.label}</p>
-      <p style="font-size:12px;opacity:.7">${pr.desc}</p>
-    </div>
-  `).join('');
-
-  // view_promotion — fires when promos render in viewport
-  promotions.forEach(pr => {
-    pushEcommerce('view_promotion', {
-      promotion_id:   pr.promotion_id,
-      promotion_name: pr.promotion_name,
-      creative_name:  pr.creative_name,
-      creative_slot:  pr.creative_slot,
-      location_id:    pr.location_id,
-      items:          pr.items.map((p, i) => itemObj(p, i)),
-    });
-  });
-}
-
-function selectPromotion(promoId) {
-  const pr = promotions.find(p => p.promotion_id === promoId);
-  if (!pr) return;
-  // select_promotion
-  pushEcommerce('select_promotion', {
-    promotion_id:   pr.promotion_id,
-    promotion_name: pr.promotion_name,
-    creative_name:  pr.creative_name,
-    creative_slot:  pr.creative_slot,
-    location_id:    pr.location_id,
-    items:          pr.items.map((p, i) => itemObj(p, i)),
-  });
-  showToast('Promo selected: ' + pr.promotion_name);
-  setTimeout(() => document.getElementById('products').scrollIntoView({ behavior:'smooth' }), 300);
-}
-
-// ══════════════════════════════════════════════════
-// PRODUCT MODAL
-// ══════════════════════════════════════════════════
-function openModal(itemId) {
-  const p = products.find(x => x.item_id === itemId);
-  if (!p) return;
-  modalProduct = p;
-  modalQty = 1;
-  document.getElementById('modal-emoji').textContent = p.emoji;
-  document.getElementById('modal-name').textContent = p.item_name;
-  document.getElementById('modal-sku').textContent = 'SKU: ' + p.item_id;
-  document.getElementById('modal-price').textContent = '$' + p.price;
-  document.getElementById('modal-desc').textContent = p.desc;
-  document.getElementById('qty-val').textContent = '1';
-  document.getElementById('product-modal').classList.add('open');
-
-  // select_item
-  const listIndex = products.indexOf(p);
-  pushEcommerce('select_item', {
-    item_list_id:   'featured_gear',
-    item_list_name: 'Featured Gear',
-    items: [itemObj(p, listIndex)],
-  });
-
-  // view_item
-  pushEcommerce('view_item', {
-    currency: CURRENCY,
-    value:    p.price,
-    items:    [itemObj(p, listIndex, 1)],
-  });
-}
-
-function closeModal() {
-  document.getElementById('product-modal').classList.remove('open');
-  modalProduct = null;
-}
-
-function changeQty(delta) {
-  modalQty = Math.max(1, modalQty + delta);
-  document.getElementById('qty-val').textContent = modalQty;
 }
 
 // ══════════════════════════════════════════════════
@@ -780,24 +679,6 @@ function closeOrderSuccess() {
   document.getElementById('order-success').classList.remove('open');
 }
 
-// ══════════════════════════════════════════════════
-// NEWSLETTER
-// ══════════════════════════════════════════════════
-function handleNewsletter(e) {
-  e.preventDefault();
-  const email = document.getElementById('nl-email').value;
-  document.getElementById('nl-success').style.display = 'block';
-  e.target.style.display = 'none';
-
-  // generate_lead — GA4's recommended event for newsletter signups
-  window.dataLayer.push({
-    event:       'generate_lead',
-    currency:    CURRENCY,
-    value:       0,
-    lead_source: 'newsletter_footer',
-    form_id:     'newsletter',
-  });
-}
 
 // ══════════════════════════════════════════════════
 // CONTACT FORM
@@ -818,16 +699,6 @@ function handleContact(e) {
   });
 }
 
-// ══════════════════════════════════════════════════
-// HERO CTA
-// ══════════════════════════════════════════════════
-document.getElementById('hero-cta').addEventListener('click', function() {
-  window.dataLayer.push({
-    event:        'select_content',
-    content_type: 'hero_cta',
-    content_id:   'shop_new_arrivals',
-  });
-});
 
 // ══════════════════════════════════════════════════
 // SCROLL DEPTH
@@ -844,22 +715,6 @@ window.addEventListener('scroll', () => {
   });
 });
 
-// ══════════════════════════════════════════════════
-// GTM DETECTION
-// ══════════════════════════════════════════════════
-function checkGTM() {
-  const detected = typeof window.google_tag_manager !== 'undefined' ||
-    (window.dataLayer && window.dataLayer.some(e => e['gtm.load']));
-
-  if (detected) {
-    document.getElementById('gtm-dot').classList.add('live');
-    document.getElementById('gtm-status').textContent = 'GTM detected and active ✓';
-  } else {
-    // Not found yet — check again in 500ms
-    setTimeout(checkGTM, 500);
-  }
-}
-setTimeout(checkGTM, 500);
 
 // ══════════════════════════════════════════════════
 // TOAST
