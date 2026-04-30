@@ -386,20 +386,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script>
 // ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+const CURRENCY = 'USD';
+
+const products = [
+  { item_id:'PSC-001', item_name:'Trailpack 45L',      item_category:'Packs',      item_brand:'Peaks Supply', price:189, emoji:'🎒', desc:'Ventilated back panel, 45L capacity, rain cover included. The one bag you need.' },
+  { item_id:'PSC-002', item_name:'Summit Tent 2P',     item_category:'Shelter',    item_brand:'Peaks Supply', price:349, emoji:'⛺', desc:'Three-season, freestanding, 2 doors. Sets up in under 4 minutes.' },
+  { item_id:'PSC-003', item_name:'Merino Base Layer',  item_category:'Apparel',    item_brand:'Peaks Supply', price:89,  emoji:'🧥', desc:'100% merino wool, odor resistant, temperature regulating.' },
+  { item_id:'PSC-004', item_name:'Headlamp Pro 500',   item_category:'Lighting',   item_brand:'Peaks Supply', price:54,  emoji:'🔦', desc:'500 lumen max, red mode, rechargeable via USB-C. 60hr battery.' },
+  { item_id:'PSC-005', item_name:'Titanium Cook Pot',  item_category:'Cooking',    item_brand:'Peaks Supply', price:42,  emoji:'🍳', desc:'750ml titanium, nesting lid, folding handles. Featherlight at 105g.' },
+  { item_id:'PSC-006', item_name:'Trail Map Bundle',   item_category:'Navigation', item_brand:'Peaks Supply', price:28,  emoji:'🗺️', desc:'Waterproof topo maps for 12 popular trail systems.' },
+];
+
+const promotions = [
+  { promotion_id:'PROMO-SUMMER-01', promotion_name:'Summer Clearance', creative_name:'Summer Banner', creative_slot:'homepage_top', location_id:'homepage', label:'Up to 30% off select gear', desc:'Limited time. While stocks last.', color:'orange', items:[products[0],products[1]] },
+  { promotion_id:'PROMO-BUNDLE-01', promotion_name:'Basecamp Bundle',  creative_name:'Bundle Banner', creative_slot:'homepage_mid',  location_id:'homepage', label:'Buy any 3 items — get 15% off', desc:'Add 3 or more products to qualify.', color:'teal', items:[products[2],products[3],products[4]] },
+];
+
+let cart = [];
+let modalProduct = null;
+let modalQty = 1;
+let dlEventCount = 0;
+let consoleOpen = true;
+let schemaOpen = false;
+
+// ══════════════════════════════════════════════════
 // DATALAYER INTERCEPT
 // ══════════════════════════════════════════════════
-
 window.dataLayer = window.dataLayer || [];
 const _push = window.dataLayer.push.bind(window.dataLayer);
 window.dataLayer.push = function(obj) {
   _push(obj);
   if (obj.event) renderDLEntry(obj);
-
-  // Detect GTM the moment it announces itself
-  if (obj['gtm.load'] || obj['gtm.start']) {
-    document.getElementById('gtm-dot').classList.add('live');
-    document.getElementById('gtm-status').textContent = 'GTM detected and active ✓';
-  }
 };
 
 function renderDLEntry(obj) {
@@ -465,35 +484,6 @@ function toggleSchema() {
   document.getElementById('schema-btn').textContent = schemaOpen ? 'hide schema' : 'show schema';
   if (schemaOpen && !consoleOpen) toggleConsole();
 }
-
-  
-// ══════════════════════════════════════════════════
-// DATA
-// ══════════════════════════════════════════════════
-const CURRENCY = 'USD';
-
-const products = [
-  { item_id:'PSC-001', item_name:'Trailpack 45L',      item_category:'Packs',      item_brand:'Peaks Supply', price:189, emoji:'🎒', desc:'Ventilated back panel, 45L capacity, rain cover included. The one bag you need.' },
-  { item_id:'PSC-002', item_name:'Summit Tent 2P',     item_category:'Shelter',    item_brand:'Peaks Supply', price:349, emoji:'⛺', desc:'Three-season, freestanding, 2 doors. Sets up in under 4 minutes.' },
-  { item_id:'PSC-003', item_name:'Merino Base Layer',  item_category:'Apparel',    item_brand:'Peaks Supply', price:89,  emoji:'🧥', desc:'100% merino wool, odor resistant, temperature regulating.' },
-  { item_id:'PSC-004', item_name:'Headlamp Pro 500',   item_category:'Lighting',   item_brand:'Peaks Supply', price:54,  emoji:'🔦', desc:'500 lumen max, red mode, rechargeable via USB-C. 60hr battery.' },
-  { item_id:'PSC-005', item_name:'Titanium Cook Pot',  item_category:'Cooking',    item_brand:'Peaks Supply', price:42,  emoji:'🍳', desc:'750ml titanium, nesting lid, folding handles. Featherlight at 105g.' },
-  { item_id:'PSC-006', item_name:'Trail Map Bundle',   item_category:'Navigation', item_brand:'Peaks Supply', price:28,  emoji:'🗺️', desc:'Waterproof topo maps for 12 popular trail systems.' },
-];
-
-const promotions = [
-  { promotion_id:'PROMO-SUMMER-01', promotion_name:'Summer Clearance', creative_name:'Summer Banner', creative_slot:'homepage_top', location_id:'homepage', label:'Up to 30% off select gear', desc:'Limited time. While stocks last.', color:'orange', items:[products[0],products[1]] },
-  { promotion_id:'PROMO-BUNDLE-01', promotion_name:'Basecamp Bundle',  creative_name:'Bundle Banner', creative_slot:'homepage_mid',  location_id:'homepage', label:'Buy any 3 items — get 15% off', desc:'Add 3 or more products to qualify.', color:'teal', items:[products[2],products[3],products[4]] },
-];
-
-let cart = [];
-let modalProduct = null;
-let modalQty = 1;
-let dlEventCount = 0;
-let consoleOpen = true;
-let schemaOpen = false;
-
-
 
 // ══════════════════════════════════════════════════
 // GA4 ECOMMERCE PUSH HELPERS
@@ -854,6 +844,22 @@ window.addEventListener('scroll', () => {
   });
 });
 
+// ══════════════════════════════════════════════════
+// GTM DETECTION
+// ══════════════════════════════════════════════════
+function checkGTM() {
+  const detected = typeof window.google_tag_manager !== 'undefined' ||
+    (window.dataLayer && window.dataLayer.some(e => e['gtm.load']));
+
+  if (detected) {
+    document.getElementById('gtm-dot').classList.add('live');
+    document.getElementById('gtm-status').textContent = 'GTM detected and active ✓';
+  } else {
+    // Not found yet — check again in 500ms
+    setTimeout(checkGTM, 500);
+  }
+}
+setTimeout(checkGTM, 500);
 
 // ══════════════════════════════════════════════════
 // TOAST
