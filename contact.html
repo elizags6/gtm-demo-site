@@ -23,7 +23,7 @@
         _nativePush(obj);
 
         // GTM detection — fires when GTM confirms container loaded
-        if (obj && (obj['gtm.load'] || obj['gtm.start'])) {
+        if (obj && (obj['gtm.load'] || obj['gtm.start']) || typeof window.google_tag_manager !== 'undefined') {
           // DOM may not be ready for gtm.start, so defer to DOMContentLoaded
           function activateBanner() {
             var dot    = document.getElementById('gtm-dot');
@@ -430,6 +430,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof window.google_tag_manager !== 'undefined') {
+    document.getElementById('gtm-dot').classList.add('live');
+    document.getElementById('gtm-status').textContent = 'GTM detected and active ✓';
+  }
+});
+
+  
   // ══════════════════════════════════════════════════
   // STATE
   // ══════════════════════════════════════════════════
