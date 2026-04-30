@@ -847,6 +847,7 @@ window.addEventListener('scroll', () => {
 // ══════════════════════════════════════════════════
 // GTM DETECTION
 // ══════════════════════════════════════════════════
+function checkGTM() {
 window.dataLayer = window.dataLayer || [];
 const _push = window.dataLayer.push.bind(window.dataLayer);
 window.dataLayer.push = function(obj) {
@@ -859,6 +860,7 @@ window.dataLayer.push = function(obj) {
     document.getElementById('gtm-status').textContent = 'GTM detected and active ✓';
   }
 };
+}
 
 // ══════════════════════════════════════════════════
 // TOAST
