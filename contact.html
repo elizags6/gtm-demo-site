@@ -847,15 +847,18 @@ window.addEventListener('scroll', () => {
 // ══════════════════════════════════════════════════
 // GTM DETECTION
 // ══════════════════════════════════════════════════
-function checkGTM() {
-  const detected = typeof window.google_tag_manager !== 'undefined' ||
-    (window.dataLayer && window.dataLayer.some(e => e['gtm.load']));
-  if (detected) {
+window.dataLayer = window.dataLayer || [];
+const _push = window.dataLayer.push.bind(window.dataLayer);
+window.dataLayer.push = function(obj) {
+  _push(obj);
+  if (obj.event) renderDLEntry(obj);
+
+  // Detect GTM load event the moment it arrives
+  if (obj['gtm.load'] || obj['gtm.start']) {
     document.getElementById('gtm-dot').classList.add('live');
     document.getElementById('gtm-status').textContent = 'GTM detected and active ✓';
   }
-}
-setTimeout(checkGTM, 1500);
+};
 
 // ══════════════════════════════════════════════════
 // TOAST
