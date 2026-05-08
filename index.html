@@ -527,7 +527,7 @@ function renderDLEntry(obj) {
 }
 
 function getEventCat(ev) {
-  if (['add_to_cart','remove_from_cart','view_cart','begin_checkout','purchase','view_item','view_item_list','select_item'].includes(ev)) return 'ecom';
+  if (['add_to_cart','addToCart','remove_from_cart','view_cart','begin_checkout','purchase','view_item','view_item_list','select_item'].includes(ev)) return 'ecom';
   if (['view_promotion','select_promotion'].includes(ev)) return 'promo';
   if (['generate_lead','contact_form_submit'].includes(ev)) return 'form';
   return 'nav';
@@ -699,7 +699,11 @@ function addToCart(p, qty, index) {
     value:    p.price * qty,
     items:    [itemObj(p, index, qty)],
   });
-
+  pushEcommerce('addToCart', {
+    currency: CURRENCY,
+    value:    p.price * qty,
+    items:    [itemObj(p, index, qty)],
+  });
   showToast('Added ' + p.item_name + ' to cart');
 }
 
